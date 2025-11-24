@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 23, 2025 at 08:52 PM
+-- Generation Time: Nov 23, 2025 at 10:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -58,6 +58,41 @@ INSERT INTO `account` (`id`, `usertype`, `first_name`, `middle_name`, `last_name
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `audit_trail`
+--
+
+CREATE TABLE `audit_trail` (
+  `id` int(11) NOT NULL,
+  `admin_id` int(11) NOT NULL,
+  `admin_email` varchar(255) NOT NULL,
+  `action_type` enum('LOGIN','LOGOUT','REQUEST_UPDATE','REQUEST_DELETE','STATUS_CHANGE','NOTIFICATION_ADD','NOTIFICATION_DELETE','USER_VIEW','PRIORITY_CHANGE') NOT NULL,
+  `action_description` text NOT NULL,
+  `target_type` varchar(50) DEFAULT NULL COMMENT 'Type of target (request, user, notification, etc.)',
+  `target_id` varchar(50) DEFAULT NULL COMMENT 'ID of the affected item',
+  `old_value` text DEFAULT NULL COMMENT 'Previous value before change',
+  `new_value` text DEFAULT NULL COMMENT 'New value after change',
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `audit_trail`
+--
+
+INSERT INTO `audit_trail` (`id`, `admin_id`, `admin_email`, `action_type`, `action_description`, `target_type`, `target_id`, `old_value`, `new_value`, `ip_address`, `user_agent`, `created_at`) VALUES
+(1, 1, 'Unknown', 'PRIORITY_CHANGE', 'Changed priority for request BHR-2025-000006 from \'\' to \'HIGH\'', 'request', 'BHR-2025-000006', '', 'HIGH', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-23 20:20:11'),
+(2, 1, 'Unknown', 'STATUS_CHANGE', 'Updated request BHR-2025-000005 status from \'IN PROGRESS\' to \'READY\'', 'request', 'BHR-2025-000005', 'IN PROGRESS', 'READY', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-23 20:20:50'),
+(3, 1, 'Unknown', 'NOTIFICATION_DELETE', 'Deleted notification: \'Health and Wellness Seminar\'', 'notification', '2', 'Health and Wellness Seminar', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-23 20:21:10'),
+(4, 1, 'admin@gov.qc.ph', 'LOGIN', 'Admin logged into the system', 'system', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-23 20:22:21'),
+(5, 1, 'admin@gov.qc.ph', 'LOGIN', 'Admin logged into the system', 'system', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-23 20:29:36'),
+(6, 1, 'admin@gov.qc.ph', 'LOGIN', 'Admin logged into the system', 'system', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-23 20:46:19'),
+(7, 1, 'admin@gov.qc.ph', 'LOGIN', 'Admin logged into the system', 'system', NULL, NULL, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-23 20:54:51'),
+(8, 1, 'admin@gov.qc.ph', 'NOTIFICATION_ADD', 'Added new NEWS notification: \'domain bukas\'', 'notification', NULL, NULL, 'domain bukas', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', '2025-11-23 20:58:53');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `notifications`
 --
 
@@ -77,10 +112,10 @@ CREATE TABLE `notifications` (
 
 INSERT INTO `notifications` (`id`, `type`, `title`, `date`, `description`, `created_at`, `updated_at`) VALUES
 (1, 'NEWS', 'Free Medical Check-up', 'November 18, 2025', 'The barangay health center will conduct free medical check-ups for all residents this coming weekend.', '2025-11-16 15:39:03', '2025-11-16 15:39:03'),
-(2, 'EVENT', 'Health and Wellness Seminar', 'November 20, 2025', 'Join us for an informative seminar about nutrition and healthy living. Open to all barangay residents.', '2025-11-16 15:39:03', '2025-11-16 15:39:03'),
 (5, 'NEWS', 'ml', 'November 25, 2025', 'jjjjjaaayy', '2025-11-16 15:45:47', '2025-11-16 15:45:47'),
 (6, 'NEWS', 'dota', 'December 29, 2025', 'rarara', '2025-11-16 15:49:08', '2025-11-16 15:49:08'),
-(8, 'NEWS', 'test', 'test', 'test', '2025-11-17 20:27:40', '2025-11-17 20:27:40');
+(8, 'NEWS', 'test', 'test', 'test', '2025-11-17 20:27:40', '2025-11-17 20:27:40'),
+(9, 'NEWS', 'domain bukas', '12132134', 'daws', '2025-11-23 20:58:53', '2025-11-23 20:58:53');
 
 -- --------------------------------------------------------
 
@@ -103,8 +138,7 @@ CREATE TABLE `password_resets` (
 --
 
 INSERT INTO `password_resets` (`id`, `email`, `otp`, `created_at`, `expires_at`, `used`, `reset_token`) VALUES
-(2, 'admin@gov.qc.ph', '267678', '2025-11-23 17:53:02', '2025-11-23 18:53:02', 0, NULL),
-(3, 'john@gmail.com', '541421', '2025-11-23 17:53:09', '2025-11-23 18:53:09', 0, NULL);
+(12, 'admin@gov.qc.ph', '639117', '2025-11-23 20:45:24', '2025-11-23 21:45:24', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -134,8 +168,9 @@ INSERT INTO `requests` (`id`, `ticket_id`, `user_id`, `fullname`, `priority`, `c
 (7, 'BHR-2025-000002', 2, 'michael', '', '09167039130', 'Clearance', 'hahaha', 'COMPLETED', '2025-11-16 12:18:55', '2025-11-17 20:25:40'),
 (8, 'BHR-2025-000003', 2, 'airam licerio', '', '09167039130', 'indigency', 'dwdsadaw', 'IN PROGRESS', '2025-11-16 12:19:07', '2025-11-17 20:25:24'),
 (9, 'BHR-2025-000004', 2, 'john@gmail.com', '', 'N/A', 'Barangay Certificate of Household Membership', 'dwasd', 'READY', '2025-11-16 16:40:41', '2025-11-17 20:36:48'),
-(13, 'BHR-2025-000005', 2, 'john@gmail.com', '', '09167039130', 'Barangay Clearance', 'haha', 'IN PROGRESS', '2025-11-17 20:33:56', '2025-11-17 20:41:35'),
-(14, 'BHR-2025-000006', 2, 'john@gmail.com', '', '09167039130', 'Barangay Construction / Renovation Permit', 'test', 'PENDING', '2025-11-17 20:34:10', '2025-11-17 20:34:10');
+(13, 'BHR-2025-000005', 2, 'john@gmail.com', '', '09167039130', 'Barangay Clearance', 'haha', 'READY', '2025-11-17 20:33:56', '2025-11-23 20:20:50'),
+(14, 'BHR-2025-000006', 2, 'john@gmail.com', 'HIGH', '09167039130', 'Barangay Construction / Renovation Permit', 'test', 'COMPLETED', '2025-11-17 20:34:10', '2025-11-23 20:20:11'),
+(15, 'BHR-2025-000007', 2, 'john@gmail.com', '', '09167039130', 'Barangay Certification for PWD', 'wawa', 'PENDING', '2025-11-23 20:31:26', '2025-11-23 20:31:26');
 
 -- --------------------------------------------------------
 
@@ -164,6 +199,17 @@ ALTER TABLE `account`
   ADD UNIQUE KEY `email` (`email`),
   ADD KEY `idx_email` (`email`),
   ADD KEY `idx_usertype` (`usertype`);
+
+--
+-- Indexes for table `audit_trail`
+--
+ALTER TABLE `audit_trail`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_admin_id` (`admin_id`),
+  ADD KEY `idx_action_type` (`action_type`),
+  ADD KEY `idx_created_at` (`created_at`),
+  ADD KEY `idx_target` (`target_type`,`target_id`),
+  ADD KEY `idx_admin_action_date` (`admin_id`,`action_type`,`created_at`);
 
 --
 -- Indexes for table `notifications`
@@ -212,22 +258,28 @@ ALTER TABLE `account`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `audit_trail`
+--
+ALTER TABLE `audit_trail`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `password_resets`
 --
 ALTER TABLE `password_resets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `requests`
 --
 ALTER TABLE `requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `request_updates`
@@ -238,6 +290,12 @@ ALTER TABLE `request_updates`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `audit_trail`
+--
+ALTER TABLE `audit_trail`
+  ADD CONSTRAINT `audit_trail_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `account` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `requests`
